@@ -1,23 +1,29 @@
 import io.restassured.RestAssured;
+import org.example.Utility;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 import pojo.LoginRequestPayload;
+import pojo.LoginResponsePayload;
 
 import static io.restassured.RestAssured.given;
 
-public class TestLoginAPI {
+public class TestLoginAPI extends Utility {
 
-    public static void main(String[] args)
+    @Test
+    public void testLogin()
     {
-        RestAssured.baseURI="https://rahulshettyacademy.com";
         LoginRequestPayload loginRequestPayload= new LoginRequestPayload();
         loginRequestPayload.setUserEmail("vinit12@gmail.com");
         loginRequestPayload.setUserPassword("Vinit@123");
 
-        String loginresponse=given().log().all()
-                .header("Content-Type", "application/json")
+        LoginResponsePayload loginresponse=given().log().all().spec(baserequestSpecification())
                .body(loginRequestPayload)
                .when().post("/api/ecom/auth/login")
-               .then().assertThat().statusCode(200).extract().response().asString();
+               .then().assertThat().statusCode(200).extract().as(LoginResponsePayload.class);
 
-       System.out.println(loginresponse);
+        Assert.assertEquals(loginresponse.getMessage(), "Login Successfully");
+
+
+
     }
 }
