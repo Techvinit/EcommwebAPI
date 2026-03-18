@@ -1,5 +1,6 @@
-import io.restassured.RestAssured;
-import org.example.Utility;
+package org.example;
+
+import org.example.Resources.JSONReaderUtility;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pojo.LoginRequestPayload;
@@ -9,15 +10,17 @@ import static io.restassured.RestAssured.given;
 
 public class TestLoginAPI extends Utility {
 
+    JSONReaderUtility reader= new JSONReaderUtility();
+
     @Test
     public void testLogin()
     {
-        LoginRequestPayload loginRequestPayload= new LoginRequestPayload();
-        loginRequestPayload.setUserEmail("vinit12@gmail.com");
-        loginRequestPayload.setUserPassword("Vinit@123");
+        //LoginRequestPayload loginRequestPayload= new LoginRequestPayload();
+        //loginRequestPayload.setUserEmail("vinit12@gmail.com");
+        //loginRequestPayload.setUserPassword("Vinit@123");
 
         LoginResponsePayload loginresponse=given().log().all().spec(baserequestSpecification())
-               .body(loginRequestPayload)
+               .body(reader.read("LoginData.json", LoginRequestPayload.class))
                .when().post("/api/ecom/auth/login")
                .then().assertThat().statusCode(200).extract().as(LoginResponsePayload.class);
 

@@ -12,7 +12,12 @@ public class Utility {
                 .setContentType("application/json").build();
         return baseReq;
     }
+    public RequestSpecification getCourseRequestSpecificaton(){
 
+       RequestSpecification cousespec=new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").build();
+        return cousespec;
+
+    }
 
 
 }
